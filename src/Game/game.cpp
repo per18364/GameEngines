@@ -1,5 +1,6 @@
 #include <iostream>
 #include "game.h"
+#include <SDL2/SDL_image.h>
 
 Game::Game()
 {
@@ -153,7 +154,14 @@ void Game::render()
     SDL_RenderFillRect(renderer, &player2);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
-    SDL_RenderFillRect(renderer, &ball);
+    // SDL_RenderFillRect(renderer, &ball);
+
+    SDL_Surface *surface = IMG_Load("./src/Ganon_Jumping_Sprite.PNG");
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    SDL_FreeSurface(surface);
+    SDL_RenderCopy(renderer, texture, nullptr, &ball);
+    SDL_DestroyTexture(texture);
 
     SDL_RenderPresent(renderer);
 }

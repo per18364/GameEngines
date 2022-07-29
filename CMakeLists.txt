@@ -22,4 +22,5 @@ target_link_libraries(
     game
     SDL2
     SDL2main
+    SDL2_image
 )
