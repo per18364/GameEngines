@@ -2,6 +2,7 @@
 #define JORGE_COMPONENTS_
 
 #include <iostream>
+#include <SDL2/SDL.h>
 #include <string.h>
 
 struct Name
@@ -21,10 +22,21 @@ struct PositionComponent
     int y;
 };
 
-struct BallSpeedComponent
+struct SpeedComponent
 {
-    float v_x;
-    float v_y;
+    int v_x;
+    int v_y;
+};
+struct SpriteComponent
+{
+    // std::string name;
+    SDL_Texture *texture;
+    SDL_Rect box;
+};
+
+struct HitComponent
+{
+    int hp;
 };
 
 #endif

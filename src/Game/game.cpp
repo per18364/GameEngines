@@ -2,7 +2,7 @@
 #include "game.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "stexture.cpp"
+#include "stexture.h"
 #include "entt.hpp"
 #include "components.hpp"
 #include "systems.hpp"
@@ -30,18 +30,25 @@ void Game::setup()
 
     SDL_GetRendererOutputSize(renderer, &window_w, &window_h);
 
+    background = new STexture(renderer, window);
+    background->load("./src/tilemap.png");
+
+    world = World{12800, 12800};
+
     p1 = r.create();
-    p2 = r.create();
-    ball = r.create();
+    enemy = r.create();
+    // p2 = r.create();
+    // ball = r.create();
 
-    r.emplace<Name>(p1, "p1");
-    createPlayerSystem(p1, 5, 200, 20, window_h / 4);
+    // r.emplace<Name>(p1, "p1");
+    createPlayerSystem(100, 100, "./src/Rei2.0.png", p1Rect);
+    createEnemySystem(50, 50, "./src/Enemy.png", enemyRect);
 
-    r.emplace<Name>(p2, "p2");
-    createPlayerSystem(p2, (window_w - 5) - 20, 200, 20, window_h / 4);
+    // r.emplace<Name>(p2, "p2");
+    // createPlayerSystem(p2, (window_w - 5) - 20, 200, 20, window_h / 4);
 
-    r.emplace<Name>(ball, "ball");
-    createBallSystem(ball, 350, 350, 20, 20, 0.2f, 0.2f);
+    // r.emplace<Name>(ball, "ball");
+    // createBallSystem(ball, 350, 350, 20, 20, 0.2f, 0.2f);
 
     // player1.x = 5;
     // player1.y = 200;
@@ -71,7 +78,10 @@ void Game::update()
     std::cout << "Game Updating..." << std::endl;
 
     limitSystem();
-    ballMovementSystem();
+    camerFollowSystem();
+    enemyUpdateSystem();
+    collisionHandler();
+    movementSystem();
 }
 
 void Game::render()
@@ -80,13 +90,17 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 34, 139, 34, 1);
     SDL_RenderClear(renderer);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
+    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
+    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
+    // SDL_SetRenderDrawColor(renderer, 255, 0, 0, 1);
 
-    boxRenderSystem(renderer);
+    // boxRenderSystem(renderer);
+
+    drawBackgroundSystems();
+    drawPlayerSystem(renderer);
+    drawEnemySystem(renderer);
 
     SDL_RenderPresent(renderer);
 }
